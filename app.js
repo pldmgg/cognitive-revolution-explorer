@@ -81,6 +81,7 @@ const state = {
 };
 
 /* ---- DOM references ---- */
+const topNav        = document.getElementById('topNav');
 const worldViewport = document.getElementById('worldViewport');
 const worldCanvas   = document.getElementById('worldCanvas');
 const navPills      = document.getElementById('navPills');
@@ -1112,6 +1113,7 @@ function wireEvents() {
   });
 
   window.addEventListener('resize', () => {
+    syncNavHeight();
     if (state.isDetailActive) { return; }
     const gridChanged = recalcGrid();
     if (gridChanged) {
@@ -1122,10 +1124,17 @@ function wireEvents() {
   });
 }
 
+/* ---- Sync nav height to CSS var ---- */
+function syncNavHeight() {
+  const h = topNav.offsetHeight;
+  document.documentElement.style.setProperty('--nav-h', h + 'px');
+}
+
 /* ---- Init ---- */
 function init() {
   buildWorld();
   buildNavPills();
+  syncNavHeight();
   buildMinimap();
   wireEvents();
   initOnboarding();
