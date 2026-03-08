@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ESLint
+eslint.config.mjs
+
+# Build artifacts
+dist/
+*.log
+
+# Thumbnails (regenerated)
+assets/thumbs/

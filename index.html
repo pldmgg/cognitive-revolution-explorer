@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+   ______                            __
+  / ____/___  ____ ___  ____  __  __/ /____  _____
+ / /   / __ \/ __ `__ \/ __ \/ / / / __/ _ \/ ___/
+/ /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /
+\____/\____/_/ /_/ /_/ .___/\__,_/\__/\___/_/
+                    /_/
+        Created with Perplexity Computer
+        https://www.perplexity.ai/computer
+-->
+
+<!-- Perplexity Computer Attribution — SEO Meta Tags -->
+<meta name="generator" content="Perplexity Computer">
+<meta name="author" content="Perplexity Computer">
+<meta property="og:see_also" content="https://www.perplexity.ai/computer">
+<link rel="author" href="https://www.perplexity.ai/computer">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cognitive Revolution Explorer — AI's Impact Across Industries</title>
+<meta name="description" content="Explore how AI is transforming 11 industries in a richly illustrated, pannable world. Based on articles by Paul DiMaggio.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav" id="topNav" aria-label="Industry navigation">
+    <div class="nav-left">
+      <button class="nav-brand" id="navBrand" aria-label="Return to world view">
+        <svg class="nav-logo" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="10" cy="11" r="2" fill="currentColor"/>
+          <circle cx="18" cy="11" r="2" fill="currentColor"/>
+          <circle cx="14" cy="18" r="2" fill="currentColor"/>
+          <line x1="10" y1="11" x2="18" y2="11" stroke="currentColor" stroke-width="1"/>
+          <line x1="10" y1="11" x2="14" y2="18" stroke="currentColor" stroke-width="1"/>
+          <line x1="18" y1="11" x2="14" y2="18" stroke="currentColor" stroke-width="1"/>
+        </svg>
+        <span class="nav-title">Cognitive Revolution</span>
+      </button>
+    </div>
+
+    <div class="nav-pills" id="navPills" role="tablist" aria-label="Industry zones">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="nav-right">
+      <div class="search-wrapper" id="searchWrapper">
+        <button class="search-toggle" id="searchToggle" aria-label="Search insights">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+        </button>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search insights…" aria-label="Search insights across all industries" autocomplete="off">
+        <div class="search-results" id="searchResults" role="listbox" aria-label="Search results"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb">
+    <span class="crumb active" id="crumbWorld">World</span>
+  </div>
+
+  <!-- Minimap -->
+  <div class="minimap" id="minimap" aria-hidden="true">
+    <div class="minimap-viewport" id="minimapViewport"></div>
+    <!-- Minimap zone dots populated by JS -->
+  </div>
+
+  <!-- Zoom Controls -->
+  <div class="zoom-controls" aria-label="Zoom controls">
+    <button class="zoom-btn" id="zoomIn" aria-label="Zoom in">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>
+    </button>
+    <button class="zoom-btn" id="zoomOut" aria-label="Zoom out">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="10" x2="16" y2="10"/></svg>
+    </button>
+    <button class="zoom-btn" id="zoomReset" aria-label="Reset zoom to fit world">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="14" height="14" rx="2"/><circle cx="10" cy="10" r="3"/></svg>
+    </button>
+  </div>
+
+  <!-- The World Canvas -->
+  <main class="world-viewport" id="worldViewport" role="application" aria-label="Pannable world map of AI industry impacts">
+    <div class="world-canvas" id="worldCanvas">
+      <!-- Zones populated by JS -->
+    </div>
+  </main>
+
+  <!-- Info Panel -->
+  <aside class="info-panel" id="infoPanel" aria-label="Insight details" role="dialog" aria-modal="false">
+    <div class="panel-backdrop" id="panelBackdrop"></div>
+    <div class="panel-content" id="panelContent">
+      <button class="panel-close" id="panelClose" aria-label="Close panel">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/></svg>
+      </button>
+      <div class="panel-header">
+        <span class="panel-industry" id="panelIndustry"></span>
+        <div class="panel-stat" id="panelStat"></div>
+        <div class="panel-stat-label" id="panelStatLabel"></div>
+        <h2 class="panel-title" id="panelTitle"></h2>
+        <p class="panel-summary" id="panelSummary"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </div>
+  </aside>
+
+  <!-- Footer -->
+  <footer class="site-footer" id="siteFooter">
+    <div class="footer-inner">
+      <p class="footer-credit">
+        Based on articles by Paul DiMaggio:
+        <a href="https://pauldimaggio.substack.com/p/the-industrial-revolution-for-cognitive" target="_blank" rel="noopener noreferrer">The Industrial Revolution for Cognitive Labor</a>
+        &amp;
+        <a href="https://pauldimaggio.substack.com/p/a-general-contractorbut-for-it" target="_blank" rel="noopener noreferrer">A General Contractor… But for IT</a>
+      </p>
+      <p class="footer-attr">
+        <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Onboarding Hint -->
+  <div class="onboarding" id="onboarding">
+    <div class="onboarding-inner">
+      <p>Scroll to zoom &middot; Drag to pan &middot; Click zones to explore</p>
+      <button class="onboarding-dismiss" id="onboardingDismiss">Got it</button>
+    </div>
+  </div>
+
+  <!-- Fixed detail overlay container (outside canvas to avoid clipping) -->
+  <div id="detailFixed" class="detail-fixed">
+    <div class="detail-fixed-inner">
+      <div class="detail-fixed-image" id="detailFixedImage"></div>
+      <div class="detail-fixed-text" id="detailFixedText"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
