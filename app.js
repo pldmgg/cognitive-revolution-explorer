@@ -421,13 +421,17 @@ function expandZone(slug) {
   const idx = industryKeys.indexOf(slug);
   if (idx < 0) { return; }
   const { x, y } = zoneGridPos(idx);
-  const vw = worldViewport.clientWidth;
-  const vh = worldViewport.clientHeight;
 
-  /* Scale so zone fills the viewport */
+  /* Hide nav so viewport expands to full screen */
+  setNavHidden(true);
+  /* Use full window dimensions since nav is now hidden */
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  /* Scale so zone fits entirely within the viewport (contain, not crop) */
   const scaleX = vw / ZONE_W;
   const scaleY = vh / ZONE_H;
-  const targetScale = Math.max(scaleX, scaleY);
+  const targetScale = Math.min(scaleX, scaleY);
 
   const zoneCenterX = x + ZONE_W / 2;
   const zoneCenterY = y + ZONE_H / 2;
@@ -496,6 +500,9 @@ function clampOffsets() {
 /* ---- Open insight (smooth zoom-reveal) ---- */
 function openInsight(insightId) {
   if (state.isDetailActive) { return; }
+
+  /* Hide nav for immersive detail view */
+  setNavHidden(true);
 
   let foundSlug = null;
   let foundInsight = null;
@@ -1094,6 +1101,76 @@ function initOnboarding() {
   });
 }
 
+/* ---- Auto-hide header ---- */
+let _navHidden = false;
+const NAV_REVEAL_ZONE = 60;   /* px from top edge to reveal on desktop */
+let _lastTouchY = 0;
+let _touchDirSamples = [];
+
+function setNavHidden(hidden) {
+  if (hidden === _navHidden) { return; }
+  _navHidden = hidden;
+  topNav.classList.toggle('nav-hidden', hidden);
+  breadcrumb.classList.toggle('nav-hidden', hidden);
+  worldViewport.classList.toggle('nav-hidden', hidden);
+  detailFixed.classList.toggle('nav-hidden', hidden);
+  backButton.classList.toggle('nav-hidden', hidden);
+}
+
+function onMouseMoveNav(e) {
+  /* On desktop, reveal when mouse is near the top */
+  if (window.innerWidth <= MOBILE_BREAKPOINT) { return; }
+  const navBottom = _navHidden ? 0 : (topNav.offsetHeight + breadcrumb.offsetHeight);
+  const revealZone = Math.max(NAV_REVEAL_ZONE, navBottom);
+  if (e.clientY <= revealZone) {
+    setNavHidden(false);
+  } else if (!_navHidden) {
+    /* Hide when mouse moves below the nav + breadcrumb area */
+    if (!searchWrapper.classList.contains('open')) {
+      setNavHidden(true);
+    }
+  }
+}
+
+/* Mobile: reveal on scroll-up gesture, hide on scroll-down.
+   We track touchmove direction on the world viewport. */
+function onTouchMoveNav(e) {
+  if (window.innerWidth > MOBILE_BREAKPOINT) { return; }
+  if (e.touches.length !== 1) { return; }
+  const curY = e.touches[0].clientY;
+  const dy = curY - _lastTouchY;
+  _lastTouchY = curY;
+  _touchDirSamples.push(dy);
+  if (_touchDirSamples.length > 5) { _touchDirSamples.shift(); }
+  const avgDY = _touchDirSamples.reduce((a, b) => a + b, 0) / _touchDirSamples.length;
+  if (avgDY > 2) {
+    /* finger moving down → scrolling up → reveal */
+    setNavHidden(false);
+  } else if (avgDY < -2) {
+    /* finger moving up → scrolling down → hide */
+    setNavHidden(true);
+  }
+}
+
+function onTouchStartNav(e) {
+  if (e.touches.length === 1) {
+    _lastTouchY = e.touches[0].clientY;
+    _touchDirSamples = [];
+  }
+}
+
+/* Auto-hide after a short delay on init */
+let _navAutoHideTimer = null;
+function scheduleNavAutoHide() {
+  clearTimeout(_navAutoHideTimer);
+  _navAutoHideTimer = setTimeout(() => {
+    /* Don't hide if mouse is over the nav or search is open */
+    if (!searchWrapper.classList.contains('open')) {
+      setNavHidden(true);
+    }
+  }, 2500);
+}
+
 /* ---- Wire up all events ---- */
 function wireEvents() {
   worldViewport.addEventListener('mousedown', onPointerDown);
@@ -1107,6 +1184,15 @@ function wireEvents() {
   worldViewport.addEventListener('touchend',   onTouchEnd);
 
   window.addEventListener('keydown', onKeyDown);
+
+  /* Auto-hide header */
+  window.addEventListener('mousemove', onMouseMoveNav);
+  window.addEventListener('touchstart', onTouchStartNav, { passive: true });
+  window.addEventListener('touchmove', onTouchMoveNav, { passive: true });
+
+  /* Keep nav visible when hovering over it */
+  topNav.addEventListener('mouseenter', () => setNavHidden(false));
+  breadcrumb.addEventListener('mouseenter', () => setNavHidden(false));
 
   zoomIn.addEventListener('click',  onZoomIn);
   zoomOut.addEventListener('click', onZoomOut);
@@ -1186,6 +1272,7 @@ function init() {
   wireEvents();
   initOnboarding();
   fitWorld(false);
+  scheduleNavAutoHide();
 }
 
 document.addEventListener('DOMContentLoaded', init);

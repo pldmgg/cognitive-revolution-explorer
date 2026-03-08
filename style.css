@@ -51,6 +51,10 @@ html, body {
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border-bottom: 1px solid var(--border);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.top-nav.nav-hidden {
+  transform: translateY(-100%);
 }
 
 .nav-left { flex-shrink: 0; }
@@ -231,6 +235,10 @@ html, body {
   border-bottom: 1px solid var(--border);
   font-size: 12px;
   color: var(--text-muted);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.breadcrumb.nav-hidden {
+  transform: translateY(calc(-100% - var(--nav-h)));
 }
 .crumb { cursor: pointer; transition: color var(--transition); }
 .crumb:hover { color: var(--text); }
@@ -249,6 +257,10 @@ html, body {
   user-select: none;
   touch-action: none;
   background: var(--bg);
+  transition: top 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.world-viewport.nav-hidden {
+  top: 0;
 }
 .world-viewport.grabbing { cursor: grabbing; }
 
@@ -660,7 +672,10 @@ html, body {
   z-index: 95;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1);
+  transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1), top 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.detail-fixed.nav-hidden {
+  top: 0;
 }
 .detail-fixed.active {
   opacity: 1;
@@ -842,6 +857,7 @@ html, body {
   top: calc(var(--nav-h) + var(--crumb-h) + 16px);
   left: 50%;
   transform: translateX(-50%) translateY(-20px);
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1), top 0.35s cubic-bezier(0.4,0,0.2,1);
   z-index: 110;
   display: none;
   align-items: center;
@@ -865,6 +881,9 @@ html, body {
   display: flex;
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+.back-button.nav-hidden {
+  top: 16px;
 }
 .back-button:hover {
   background: rgba(110,231,247,0.15);
