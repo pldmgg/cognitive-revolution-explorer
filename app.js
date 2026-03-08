@@ -683,6 +683,54 @@ function updateActivePill() {
   state.activeZoneSlug = newSlug;
 }
 
+/* ---- Navigate to zone (from breadcrumb or detail) ---- */
+function navigateToZone(slug) {
+  /* Clean up detail overlay if active */
+  if (state.isDetailActive) {
+    hideFixedDetail();
+    if (state.openInsightZoneSlug) {
+      const zone = document.getElementById(`zone-${state.openInsightZoneSlug}`);
+      if (zone) { zone.classList.remove('detail-active'); }
+    }
+    state.isDetailActive = false;
+    state.openInsightId = null;
+    state.openInsightZoneSlug = null;
+  }
+
+  /* Clean up expanded-state classes */
+  if (state.isZoneExpanded) {
+    worldCanvas.classList.remove('zone-expanded');
+    document.querySelectorAll('.zone.zone-expanded-active').forEach(z => {
+      z.classList.remove('zone-expanded-active');
+    });
+    state.isZoneExpanded = false;
+  }
+
+  backButton.classList.remove('visible');
+  state.savedTransform = null;
+  worldViewport.style.cursor = 'grab';
+
+  /* Compute the target transform to center on the zone (same as panToZone) */
+  const idx = industryKeys.indexOf(slug);
+  if (idx < 0) { return; }
+  const { x, y } = zoneGridPos(idx);
+  const vw = worldViewport.clientWidth;
+  const vh = worldViewport.clientHeight;
+  const isMobile = vw <= MOBILE_BREAKPOINT;
+  const maxPanScale = isMobile ? 1.5 : 0.85;
+  const targetScale = Math.min(maxPanScale, (vw * 0.95) / ZONE_W, (vh * 0.85) / ZONE_H);
+  const offX = vw / 2 - (x + ZONE_W / 2) * targetScale;
+  const offY = isMobile
+    ? (vh * 0.15) - y * targetScale
+    : vh / 2 - (y + ZONE_H / 2) * targetScale;
+
+  state.activeZoneSlug = slug;
+  lerpTo(offX, offY, targetScale, ANIM_DURATION, () => {
+    worldViewport.style.cursor = 'grab';
+  });
+  updateBreadcrumb(slug, null);
+}
+
 /* ---- Breadcrumb ---- */
 function updateBreadcrumb(slug, insightId) {
   breadcrumb.querySelectorAll('.crumb:not(#crumbWorld), .crumb-sep').forEach(el => el.remove());
@@ -695,8 +743,7 @@ function updateBreadcrumb(slug, insightId) {
     zoneCrumb.className = 'crumb' + (insightId ? '' : ' active');
     zoneCrumb.textContent = INDUSTRIES[slug].name;
     zoneCrumb.addEventListener('click', () => {
-      if (state.isDetailActive) { zoomBackOut(); }
-      panToZone(slug, true);
+      navigateToZone(slug);
     });
     breadcrumb.appendChild(sep1);
     breadcrumb.appendChild(zoneCrumb);
