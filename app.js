@@ -468,30 +468,31 @@ function zoomAroundPoint(newScale, cx, cy) {
 }
 
 /* ---- Clamp offset ---- */
-/* Dragging right stops when the first column is centered in the viewport.
-   Dragging left stops when the last column is centered in the viewport.
-   Same logic vertically for rows. */
+/* Dragging right stops when the left edge of the first column is
+   visible (with a small margin).  Dragging left stops when the
+   right edge of the last column is visible.  Same vertically. */
 function clampOffsets() {
   const vw = worldViewport.clientWidth;
   const vh = worldViewport.clientHeight;
   const s  = state.scale;
+  const PAD = 8;  /* small pixel margin so content doesn't touch the edge */
 
-  /* World-space center of first and last column */
-  const firstColCenter = ZONE_W / 2;
-  const lastColCenter  = (gridCols - 1) * CELL_W + ZONE_W / 2;
+  /* World-space edges */
+  const worldLeft   = 0;
+  const worldRight  = totalWorldW;
+  const worldTop    = 0;
+  const worldBottom = totalWorldH;
 
-  /* offsetX that places each column center at viewport center */
-  const maxOffX = vw / 2 - firstColCenter * s;   /* dragged fully right */
-  const minOffX = vw / 2 - lastColCenter  * s;   /* dragged fully left  */
+  /* maxOffX = dragged fully right → left edge of world sits at left of viewport + pad */
+  const maxOffX = PAD - worldLeft * s;
+  /* minOffX = dragged fully left → right edge of world sits at right of viewport - pad */
+  const minOffX = (vw - PAD) - worldRight * s;
 
   state.offsetX = clamp(state.offsetX, Math.min(minOffX, maxOffX), Math.max(minOffX, maxOffX));
 
   /* Same for rows */
-  const firstRowCenter = ZONE_H / 2;
-  const lastRowCenter  = (gridRows - 1) * CELL_H + ZONE_H / 2;
-
-  const maxOffY = vh / 2 - firstRowCenter * s;   /* dragged fully down */
-  const minOffY = vh / 2 - lastRowCenter  * s;   /* dragged fully up   */
+  const maxOffY = PAD - worldTop * s;
+  const minOffY = (vh - PAD) - worldBottom * s;
 
   state.offsetY = clamp(state.offsetY, Math.min(minOffY, maxOffY), Math.max(minOffY, maxOffY));
 }
