@@ -885,14 +885,14 @@ html, body {
   transform: rotate(180deg);
 }
 
-/* The panel that slides in/out */
+/* The panel that slides in/out — fixed to viewport so it never clips */
 .id-panel {
-  position: absolute;
-  top: 50%;
+  position: fixed;
+  top: var(--nav-h, 56px);
   left: 0;
-  transform: translate(-100%, -50%);
+  transform: translateX(-100%);
   width: 210px;
-  max-height: 80vh;
+  max-height: calc(100vh - var(--nav-h, 56px) - 20px);
   overflow-y: auto;
   background: rgba(10, 14, 26, 0.94);
   border: 1px solid rgba(110, 231, 247, 0.2);
@@ -907,7 +907,7 @@ html, body {
   box-shadow: 4px 0 20px rgba(0,0,0,0.4);
 }
 .industry-drawer.open .id-panel {
-  transform: translate(30px, -50%);
+  transform: translateX(0);
 }
 
 /* Each industry row */
@@ -1103,9 +1103,7 @@ html, body {
 
   /* Industry drawer: smaller on mobile */
   .industry-drawer { top: auto; bottom: 70px; transform: translateY(0); }
-  .id-panel { width: 180px; max-height: 55vh; }
-  .id-panel { top: auto; bottom: 0; transform: translate(-100%, 0); }
-  .industry-drawer.open .id-panel { transform: translate(28px, 0); }
+  .id-panel { width: 180px; max-height: calc(100vh - var(--nav-h, 48px) - 20px); top: var(--nav-h, 48px); }
   .id-tab { min-height: 56px; width: 28px; }
   .id-item { padding: 6px 10px; font-size: 11px; }
 
