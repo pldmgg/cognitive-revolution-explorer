@@ -861,21 +861,17 @@ function onTouchStart(e) {
   if (e.touches.length === 1) {
     state.touchState = {
       mode: 'pan',
-      startX: e.touches[0].clientX,
-      startY: e.touches[0].clientY,
-      startOffX: state.offsetX,
-      startOffY: state.offsetY
+      lastX: e.touches[0].clientX,
+      lastY: e.touches[0].clientY
     };
   } else if (e.touches.length === 2) {
     const mid  = getTouchMidpoint(e.touches);
     const dist = getTouchDist(e.touches);
     state.touchState = {
       mode: 'pinch',
-      startDist: dist,
-      startScale: state.scale,
-      midX: mid.x, midY: mid.y,
-      startOffX: state.offsetX,
-      startOffY: state.offsetY
+      lastDist: dist,
+      lastMidX: mid.x,
+      lastMidY: mid.y
     };
     e.preventDefault();
   }
@@ -884,28 +880,57 @@ function onTouchStart(e) {
 function onTouchMove(e) {
   if (!state.touchState) { return; }
   if (state.touchState.mode === 'pan' && e.touches.length === 1) {
-    const dx = e.touches[0].clientX - state.touchState.startX;
-    const dy = e.touches[0].clientY - state.touchState.startY;
-    state.offsetX = state.touchState.startOffX + dx;
-    state.offsetY = state.touchState.startOffY + dy;
+    const curX = e.touches[0].clientX;
+    const curY = e.touches[0].clientY;
+    const dx = curX - state.touchState.lastX;
+    const dy = curY - state.touchState.lastY;
+    state.offsetX += dx;
+    state.offsetY += dy;
+    state.touchState.lastX = curX;
+    state.touchState.lastY = curY;
+    clampOffsets();
     scheduleTransform();
     e.preventDefault();
   } else if (state.touchState.mode === 'pinch' && e.touches.length === 2) {
+    const newMid   = getTouchMidpoint(e.touches);
     const newDist  = getTouchDist(e.touches);
-    const newScale = clamp(state.touchState.startScale * (newDist / state.touchState.startDist), ZOOM_MIN, ZOOM_MAX);
-    const factor   = newScale / state.scale;
-    state.offsetX  = state.touchState.midX - (state.touchState.midX - state.touchState.startOffX) * factor;
-    state.offsetY  = state.touchState.midY - (state.touchState.midY - state.touchState.startOffY) * factor;
-    state.scale    = newScale;
+    const rect     = worldViewport.getBoundingClientRect();
+    /* Pan by midpoint movement */
+    const panDX = newMid.x - state.touchState.lastMidX;
+    const panDY = newMid.y - state.touchState.lastMidY;
+    state.offsetX += panDX;
+    state.offsetY += panDY;
+    /* Zoom around current midpoint */
+    const cx = newMid.x - rect.left;
+    const cy = newMid.y - rect.top;
+    const scaleRatio = newDist / state.touchState.lastDist;
+    const newScale   = clamp(state.scale * scaleRatio, ZOOM_MIN, ZOOM_MAX);
+    const factor     = newScale / state.scale;
+    state.offsetX = cx - (cx - state.offsetX) * factor;
+    state.offsetY = cy - (cy - state.offsetY) * factor;
+    state.scale   = newScale;
+    /* Update last values for next frame */
+    state.touchState.lastDist = newDist;
+    state.touchState.lastMidX = newMid.x;
+    state.touchState.lastMidY = newMid.y;
+    clampOffsets();
     scheduleTransform();
     e.preventDefault();
   }
 }
 
-function onTouchEnd() {
+function onTouchEnd(e) {
+  if (!state.touchState) { return; }
+  /* If going from 2 fingers to 1, re-initialize as a pan */
+  if (e.touches.length === 1 && state.touchState.mode === 'pinch') {
+    state.touchState = {
+      mode: 'pan',
+      lastX: e.touches[0].clientX,
+      lastY: e.touches[0].clientY
+    };
+    return;
+  }
   state.touchState = null;
-  clampOffsets();
-  scheduleTransform();
 }
 
 /* ---- Keyboard ---- */
