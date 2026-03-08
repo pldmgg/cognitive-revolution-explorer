@@ -511,6 +511,207 @@ const INDUSTRIES = {
     ]
   },
 
+  'real-estate': {
+    name: 'Real Estate',
+    subtitle: 'The $34B Automation Wave',
+    color: '#D97706',
+    tagline: 'AI is reshaping how properties are valued, screened, managed, and funded — disrupting a $92B labor base.',
+    icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 42h36"/><path d="M10 42V22l14-12 14 12v20"/><rect x="18" y="30" width="8" height="12"/><rect x="14" y="24" width="6" height="6"/><rect x="28" y="24" width="6" height="6"/></svg>`,
+    headlineStat: { value: '$34B', label: 'Efficiency Gains by 2030' },
+    insights: [
+      {
+        id: 're-automation',
+        title: 'The $34B Automation Takeover',
+        stat: '$34B',
+        statLabel: 'projected AI efficiency gains for real estate by 2030',
+        summary: 'Morgan Stanley projects $34 billion in efficiency gains as 37% of real estate tasks become automatable — one REIT already cut headcount 15%.',
+        details: `<ul>
+          <li><strong>$34 billion in efficiency gains</strong> projected by 2030 across 162 REIT and CRE firms with $92B in combined labor costs and 525,000 employees — 37% of tasks now automatable (<a href="https://www.morganstanley.com/insights/articles/ai-in-real-estate-2025" target="_blank">Morgan Stanley</a>)</li>
+          <li>A self-storage REIT automated 85% of customer interactions, <strong>reducing on-property labor hours by 30%</strong>; a residential REIT cut full-time employees by 15% since 2021 (<a href="https://www.morganstanley.com/insights/articles/ai-in-real-estate-2025" target="_blank">Morgan Stanley</a>)</li>
+          <li>JLL's Hank AI reduced HVAC energy costs <strong>20%+</strong>; one Bay Area office saw 45% HVAC energy reduction and doubled fresh air circulation (<a href="https://www.naiop.org/research-and-publications/magazine/2024/Winter-2024-2025/business-trends/ais-growing-impact-on-commercial-real-estate/" target="_blank">NAIOP</a>)</li>
+          <li><strong>84% of commercial building decision-makers</strong> plan to increase AI use, with 92% citing workforce skill shortages as an accelerant (<a href="https://www.publicpower.org/periodical/article/artificial-intelligence-offers-tools-boost-energy-efficiency-reduce-carbon-emissions-buildings" target="_blank">Honeywell/Public Power</a>)</li>
+        </ul>`,
+        type: 'trend'
+      },
+      {
+        id: 're-screening',
+        title: 'Screening Scores vs. Fair Housing',
+        stat: '80%',
+        statLabel: 'more likely to deny Black mortgage applicants vs. comparable White applicants',
+        summary: 'AI tenant screening replicates and amplifies decades of housing discrimination — triggering landmark lawsuits and federal intervention.',
+        details: `<ul>
+          <li>Lenders <strong>80% more likely to deny Black applicants</strong>, 70% more for Native Americans, 50% more for Asian/Pacific Islanders, 40% more for Latinos vs. comparable White applicants — tied to algorithmic scoring (<a href="https://www.law.georgetown.edu/poverty-journal/blog/the-discriminatory-impacts-of-ai-powered-tenant-screening-programs/" target="_blank">Georgetown Law</a>)</li>
+          <li>SafeRent case: a Black applicant with <strong>16 years of on-time rent</strong> was denied housing by AI scoring — settled for $2.3 million (<a href="https://www.law.georgetown.edu/poverty-journal/blog/the-discriminatory-impacts-of-ai-powered-tenant-screening-programs/" target="_blank">Georgetown Law</a>)</li>
+          <li>HUD issued formal <strong>Fair Housing Act guidance on AI</strong> in May 2024, stating housing providers remain legally responsible even when using third-party AI tools (<a href="https://archives.hud.gov/news/2024/pr24-098.html" target="_blank">HUD</a>)</li>
+          <li>Georgetown researchers warn AI may be <strong>more biased than humans</strong> because landlords rely on algorithmic scores rather than underlying data (<a href="https://www.law.georgetown.edu/poverty-journal/blog/the-discriminatory-impacts-of-ai-powered-tenant-screening-programs/" target="_blank">Georgetown Law</a>)</li>
+        </ul>`,
+        type: 'tension'
+      },
+      {
+        id: 're-avm',
+        title: 'AVMs Are Replacing Appraisers',
+        stat: '$300→$15',
+        statLabel: 'cost of property valuation: traditional appraisal vs. AI',
+        summary: 'AI valuation models compress a 3–5 day, $300–$500 appraisal into 60 seconds for $5–$15, covering 116 million homes.',
+        details: `<ul>
+          <li>AI AVMs analyze <strong>300+ data points in real time</strong> at $5–$15 vs. 20–50 data points over 3–5 days at $300–$500 for traditional appraisals (<a href="https://www.growthfactor.ai/blog-posts/ai-property-valuation" target="_blank">GrowthFactor</a>)</li>
+          <li>Zillow's Zestimate covers <strong>116 million U.S. homes</strong> with 1.83% median error on-market (7.01% off-market) (<a href="https://www.zillow.com/zestimate/" target="_blank">Zillow</a>)</li>
+          <li>Rocket Mortgage's AI processes <strong>1.5 million documents monthly</strong> with 70% auto-identification, saving 5,000+ underwriter hours/month; 73% of AI-adopting lenders cite operational efficiency as primary objective (<a href="https://www.propair.ai/insights/predictive-ai-in-us-mortgage-lending-and-insurance-outperforming-the-competition-2024-2025/" target="_blank">ProPair</a>)</li>
+          <li>NYC benchmarking study found Zestimates <strong>overstated values by 16–18%</strong> in heterogeneous neighborhoods — significant blind spots remain (<a href="https://acr-journal.com/article/zestimate-vs-reality-benchmarking-automated-valuations-against-new-york-city-assessments-1510/" target="_blank">ACR Journal</a>)</li>
+        </ul>`,
+        type: 'impact'
+      },
+      {
+        id: 're-proptech',
+        title: "Real Estate Tech's $16.7B AI Gold Rush",
+        stat: '$16.7B',
+        statLabel: 'global proptech VC invested in 2025 — up 67.9% year-over-year',
+        summary: 'Proptech funding surged to $16.7B in 2025. AI-centered firms growing at 42% vs 24% for non-AI. Three new unicorns — all AI-native.',
+        details: `<ul>
+          <li><strong>$16.7 billion invested globally</strong> in proptech in 2025, a 67.9% YoY increase surpassing pre-pandemic highs; January 2026 alone saw $1.7B (176% increase over Jan 2025) (<a href="https://creti.org/insights/proptech-venture-capital-in-2025-end-of-year-report" target="_blank">CRETI</a>)</li>
+          <li>AI-centered proptech companies grew at <strong>42% annually vs. 24% for non-AI</strong>; 71.9% of capital went to just 35 companies in deals over $100M (<a href="https://creti.org/insights/proptech-venture-capital-in-2025-end-of-year-report" target="_blank">CRETI</a>)</li>
+          <li>Three new unicorns since July 2025 — all AI-native: <strong>Bedrock Robotics</strong> ($1.75B, autonomous construction), <strong>Basis AI</strong> ($1.15B, agentic real estate accounting) (<a href="https://www.theaiconsultingnetwork.com/blog/proptech-vc-16-billion-ai-funding-cre-investors-2026" target="_blank">AI Consulting Network</a>)</li>
+          <li><strong>88% of real estate investors</strong> already piloting AI, pursuing an average of 5 use cases simultaneously (<a href="https://www.jll.com/en-us/insights/ai-for-business-growth-are-real-estate-investors-ready-to-gain-the-competitive-edge" target="_blank">JLL</a>)</li>
+        </ul>`,
+        type: 'trend'
+      }
+    ]
+  },
+
+  'marketing': {
+    name: 'Marketing / Advertising',
+    subtitle: 'The 83% Creative Takeover',
+    color: '#E11D48',
+    tagline: 'AI-generated ad creative has moved from experimental to standard operating procedure — but consumers aren\'t buying the hype.',
+    icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h8l4-6h12l4 6h8v28H6z"/><circle cx="24" cy="28" r="8"/><circle cx="24" cy="28" r="3"/><circle cx="36" cy="18" r="2" fill="currentColor"/></svg>`,
+    headlineStat: { value: '83%', label: 'Ad Execs Using AI Creative' },
+    insights: [
+      {
+        id: 'mkt-creative',
+        title: 'The AI Creative Takeover',
+        stat: '83%',
+        statLabel: 'of ad executives have deployed AI in creative production',
+        summary: '83% of ad execs deploy AI in creative production — up from 60% in 2024. Meta\'s Advantage+ delivers $4.52 per $1 spent.',
+        details: `<ul>
+          <li><strong>83% of ad executives</strong> have deployed AI in creative production, up from 60% one year earlier (<a href="https://www.iab.com/insights/the-ai-gap-widens/" target="_blank">IAB, Jan 2026</a>)</li>
+          <li>Meta's AI-powered Advantage+ delivers <strong>$4.52 in revenue for every $1 spent</strong> — 22% higher return than standard manual campaigns (<a href="https://coinis.com/blog/meta-advantage-plus-ai-ads-updates-2025" target="_blank">Coinis/Meta</a>)</li>
+          <li>Google's Performance Max drives <strong>18% more conversions at similar CPA</strong> across 1 million+ advertisers globally (<a href="https://www.dataslayer.ai/blog/google-ads-performance-max-complete-guide-2025" target="_blank">Dataslayer</a>)</li>
+          <li>Top stated benefit shifted from "creative innovation" (61%) to <strong>"cost efficiency" (64%)</strong> — AI has industrialized creative production (<a href="https://www.iab.com/insights/the-ai-gap-widens/" target="_blank">IAB</a>)</li>
+        </ul>`,
+        type: 'trend'
+      },
+      {
+        id: 'mkt-trust',
+        title: 'AI Ads vs. Consumer Trust',
+        stat: '37-pt',
+        statLabel: 'gap between exec optimism (82%) and consumer positivity (45%)',
+        summary: '82% of ad execs think consumers like AI ads — only 45% actually do. Gen Z backlash is sharpest: 39% feel negative.',
+        details: `<ul>
+          <li><strong>82% of ad execs</strong> believe consumers feel positive about AI ads — only <strong>45% of consumers</strong> actually do, a 37-point gap that widened from 32 points in one year (<a href="https://www.iab.com/insights/the-ai-gap-widens/" target="_blank">IAB, Jan 2026</a>)</li>
+          <li>Gen Z: <strong>39% feel negative</strong> about AI ads (vs. 20% Millennials); 30% call AI-using brands "inauthentic," 26% "disconnected," 24% "unethical" (<a href="https://www.iab.com/insights/the-ai-gap-widens/" target="_blank">IAB</a>)</li>
+          <li>Brand partnerships with <strong>AI virtual influencers dropped ~30%</strong> between 2024 and 2025; 96% of brands steering clear cite consumer trust concerns (<a href="https://digiday.com/media/in-graphic-detail-virtual-influencers-click-with-young-audiences-yet-brands-interest-wanes/" target="_blank">Digiday</a>)</li>
+          <li>Yet 73% of consumers say knowing an ad was AI-created <strong>either increases or has no impact</strong> on purchase intent — risk is brand perception, not conversion (<a href="https://www.iab.com/insights/the-ai-gap-widens/" target="_blank">IAB</a>)</li>
+        </ul>`,
+        type: 'tension'
+      },
+      {
+        id: 'mkt-seo',
+        title: "SEO's Zero-Click Collapse",
+        stat: '-61%',
+        statLabel: 'drop in organic CTR on Google AI Overview queries',
+        summary: 'Organic click-through rates collapsed 61% on Google AI Overview queries. 60% of all Google searches now end in zero clicks.',
+        details: `<ul>
+          <li>Organic CTR on queries with AI Overviews <strong>collapsed 61%</strong> (1.76% → 0.61%); paid CTR plummeted 68% (19.7% → 6.34%) — tracking 25.1M impressions across 42 organizations (<a href="https://www.seerinteractive.com/insights/aio-impact-on-google-ctr-september-2025-update" target="_blank">Seer Interactive</a>)</li>
+          <li><strong>60% of all Google searches</strong> now end in zero clicks; AI Overviews appear for 13.14% of all queries, up from 6.49% in Jan 2025 (<a href="https://thedigitalbloom.com/learn/2025-organic-traffic-crisis-analysis-report/" target="_blank">Digital Bloom</a>)</li>
+          <li>HubSpot reported <strong>70–80% organic traffic declines</strong>; CNN fell 27–38%. McKinsey estimates $750B in consumer revenue will flow through AI search by 2028 (<a href="https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/new-front-door-to-the-internet-winning-in-the-age-of-ai-search" target="_blank">McKinsey</a>)</li>
+          <li>AI referral traffic from LLM platforms <strong>surged 527% YoY</strong> in first half of 2025 — 1.13 billion referral visits in June 2025 (<a href="https://www.semrush.com/blog/ai-seo-statistics/" target="_blank">Semrush</a>)</li>
+        </ul>`,
+        type: 'impact'
+      },
+      {
+        id: 'mkt-agency',
+        title: 'Agency Workforce in Freefall',
+        stat: '32,000',
+        statLabel: 'US agency jobs projected eliminated by 2030',
+        summary: 'Forrester projects 32K agency jobs eliminated by 2030. BlueFocus fired its entire human creative team. AI-skilled marketers command 43% salary premium.',
+        details: `<ul>
+          <li>Forrester projects <strong>32,000 US agency jobs</strong> (7.5% of total workforce) eliminated by automation by 2030 (<a href="https://www.kalungi.com/blog/ais-seismic-impact-on-marketing-careers" target="_blank">Kalungi</a>)</li>
+          <li>BlueFocus terminated its <strong>entire human content writing and design workforce</strong> "fully and indefinitely" in April 2024, replacing them with generative AI (<a href="https://tech.co/news/companies-replace-workers-with-ai" target="_blank">Tech.co</a>)</li>
+          <li>AI-enabled teams demonstrate <strong>2–3x productivity multipliers</strong>, 22% higher ROI, and 75% faster campaign launches (4–5 days vs. 3–4 weeks) (<a href="https://www.kalungi.com/blog/ais-seismic-impact-on-marketing-careers" target="_blank">Kalungi</a>)</li>
+          <li>AI-skilled marketers command a <strong>43% salary premium</strong> over non-AI peers — up from 25% one year prior ($195K vs. ~$177K average) (<a href="https://www.kalungi.com/blog/ais-seismic-impact-on-marketing-careers" target="_blank">Kalungi/PwC</a>)</li>
+        </ul>`,
+        type: 'impact'
+      }
+    ]
+  },
+
+  'government': {
+    name: 'Government / Public Sector',
+    subtitle: 'The $4B Fraud Catcher',
+    color: '#1D4ED8',
+    tagline: 'Governments are simultaneously the biggest AI promoters and the entities most responsible for regulating its risks.',
+    icon: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 42h36"/><path d="M8 34h32v8H8z"/><path d="M12 22v12"/><path d="M20 22v12"/><path d="M28 22v12"/><path d="M36 22v12"/><path d="M6 22h36L24 10z"/></svg>`,
+    headlineStat: { value: '$4B', label: 'Fraud Caught by Treasury AI' },
+    insights: [
+      {
+        id: 'gov-fraud',
+        title: 'AI Catches What Humans Miss',
+        stat: '$4B',
+        statLabel: 'fraud recovered/prevented by Treasury AI in FY2024',
+        summary: 'Treasury\'s ML fraud detection recovered/prevented $4B in FY2024 — a 6x increase from $652M the prior year.',
+        details: `<ul>
+          <li>Treasury's Office of Payment Integrity prevented and recovered <strong>over $4 billion</strong> in fraudulent/improper payments in FY2024 — up from $652.7M in FY2023, a <strong>6x increase</strong> (<a href="https://home.treasury.gov/news/press-releases/jy2650" target="_blank">U.S. Treasury</a>)</li>
+          <li>Breakdown: $2.5B from high-risk transaction prioritization, $1B from ML-powered check fraud recovery, $500M from expanded risk-based screening, $180M from processing efficiencies (<a href="https://www.nextgov.com/artificial-intelligence/2024/10/ai-tools-helped-treasury-recover-billions-fraud-and-improper-payments/400368/" target="_blank">Nextgov/FCW</a>)</li>
+          <li>CMS denied <strong>800,000+ fraudulent claims</strong> saving $141M between Jan–Aug 2025 alone (<a href="https://www.carahsoft.com/blog/onspring-the-practical-applications-of-ai-in-government-blog-2025" target="_blank">Carahsoft/CMS</a>)</li>
+          <li>BCG finds AI in government case processing can save <strong>up to 35% of budget costs</strong> over 10 years — vs. 10–15% from traditional cost optimization (<a href="https://www.bcg.com/publications/2025/benefits-of-ai-in-government" target="_blank">BCG</a>)</li>
+        </ul>`,
+        type: 'impact'
+      },
+      {
+        id: 'gov-pentagon',
+        title: 'The Pentagon Goes AI-First',
+        stat: '$13.4B',
+        statLabel: 'Pentagon FY2026 AI & autonomous systems budget',
+        summary: 'The Pentagon earmarked $13.4B for AI and autonomous systems — its first-ever standalone budget line — and launched an "AI-first warfighting force" strategy.',
+        details: `<ul>
+          <li><strong>$13.4 billion</strong> earmarked for AI and autonomous systems in FY2026 — first-ever standalone line item: $9.4B aerial drones, $1.7B maritime, $734M underwater, $210M ground, $1.2B software integration (<a href="https://www.cdomagazine.tech/us-federal-news-bureau/pentagon-seeks-13-4-bn-for-ai-and-autonomy-fy-2026-budget-request" target="_blank">CDO Magazine</a>)</li>
+          <li>Seven "Pace-Setting Projects" including <strong>Swarm Forge</strong> (autonomous drone swarms), <strong>Agent Network</strong> (AI battle management), and <strong>GenAI.mil</strong> (frontier AI models for all DoD personnel) (<a href="https://www.war.gov/News/Releases/Release/Article/4376420/war-department-launches-ai-acceleration-strategy-to-secure-american-military-ai/" target="_blank">DoW</a>)</li>
+          <li>Defense Innovation Unit budget increased to <strong>$2 billion</strong> (from $1.3B); $500M allocated to new Defense Autonomous Warfare Group (<a href="https://www.defenseone.com/policy/2026/02/pentagons-spending-plan-doubles-down-land-air-sea-robots/411628/" target="_blank">Defense One</a>)</li>
+          <li>Anthropic refused Pentagon demand for kinetic autonomous operations — <strong>Trump administration ordered all agencies to cease using Anthropic technology</strong> (<a href="https://www.opb.org/article/2026/02/27/anthropic-refuses-to-bend-to-pentagon-on-ai-safeguards-as-dispute-nears-deadline/" target="_blank">Bloomberg/OPB</a>)</li>
+        </ul>`,
+        type: 'trend'
+      },
+      {
+        id: 'gov-regulate',
+        title: 'Regulate or Accelerate?',
+        stat: '1,000+',
+        statLabel: 'state AI bills introduced in the U.S. in 2025',
+        summary: '1,000+ state AI bills in 2025 while Trump\'s EO sought to preempt them all. Only 1 AI-specific federal statute enacted all year.',
+        details: `<ul>
+          <li><strong>1,000+ AI-related bills</strong> introduced across U.S. states in 2025; December 2025 EO created a DOJ AI Litigation Task Force to challenge "onerous" state regulations (<a href="https://www.whitehouse.gov/presidential-actions/2025/12/eliminating-state-law-obstruction-of-national-artificial-intelligence-policy/" target="_blank">White House</a>)</li>
+          <li>Only <strong>1 AI-specific federal statute</strong> enacted in all of 2025 — the narrow TAKE IT DOWN Act targeting nonconsensual intimate images (<a href="https://www.skadden.com/insights/publications/2026/2026-insights/sector-spotlights/dont-believe-the-hype" target="_blank">Skadden</a>)</li>
+          <li>EU AI Act penalty regime took force August 2025 — fines up to <strong>€35M or 7% of global turnover</strong> — but 14 of 27 member states hadn't designated compliance authorities (<a href="https://www.dlapiper.com/insights/publications/2025/08/latest-wave-of-obligations-under-the-eu-ai-act-take-effect" target="_blank">DLA Piper</a>)</li>
+          <li><strong>$2.2B in unclassified federal AI procurement</strong> in FY2025 — government is simultaneously the largest buyer and the regulator (<a href="https://news.bgov.com/bloomberg-government-news/ai-sales-to-us-agencies-run-on-off-the-shelf-not-custom-deals" target="_blank">Bloomberg Government</a>)</li>
+        </ul>`,
+        type: 'tension'
+      },
+      {
+        id: 'gov-surveillance',
+        title: 'Surveillance State or Safety Tool?',
+        stat: '40x',
+        statLabel: 'higher facial recognition error rate for darker-skinned women',
+        summary: 'Facial recognition error rates 40x higher for darker-skinned women. 8 Americans wrongfully arrested. Milwaukee banned it entirely in 2026.',
+        details: `<ul>
+          <li>MIT's Gender Shades study: error rates of <strong>0.8% for light-skinned men but 34.7% for darker-skinned women</strong> — a 43-fold disparity; NIST found African American and Asian faces 10–100x more likely to be misidentified (<a href="https://www.joneswalker.com/en/insights/blogs/ai-law-blog/ai-police-surveillance-bias-the-minority-report-impacting-constitutional-right.html" target="_blank">Jones Walker</a>)</li>
+          <li>At least <strong>8 Americans wrongfully arrested</strong> based on faulty facial recognition matches; police in some cases treated software suggestions as "100% matches" (<a href="https://www.joneswalker.com/en/insights/blogs/ai-law-blog/ai-police-surveillance-bias-the-minority-report-impacting-constitutional-right.html" target="_blank">Jones Walker</a>)</li>
+          <li>Milwaukee PD <strong>banned facial recognition entirely</strong> in February 2026 after revelations it continued using the software without governance or criminal discovery disclosure (<a href="https://www.route-fifty.com/public-safety/2026/02/public-outcry-over-facial-recognition-technology-leads-milwaukee-police-ban-it-now/411282/" target="_blank">Route Fifty</a>)</li>
+          <li>China deploys an estimated <strong>600 million surveillance cameras</strong> — roughly 3 per 7 citizens — with AI predicting protests, assessing inmate emotions, and automating censorship (<a href="https://www.cnn.com/2025/12/04/china/china-ai-censorship-surveillance-report-intl-hnk" target="_blank">CNN</a>)</li>
+        </ul>`,
+        type: 'tension'
+      }
+    ]
+  },
+
   'labor-market': {
     name: 'Labor Market Impact',
     subtitle: 'Who Wins, Who Loses',

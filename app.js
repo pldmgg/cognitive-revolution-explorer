@@ -1,6 +1,6 @@
 /* ============================================================
    Cognitive Revolution Explorer — app.js
-   V5: Grid layout (4 cols × 3 rows), fixed detail overlay,
+   V6: Grid layout (dynamic cols × rows), fixed detail overlay,
    smooth lerp zoom, trackpad-friendly scrolling
    ============================================================ */
 
