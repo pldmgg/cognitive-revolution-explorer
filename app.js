@@ -127,6 +127,20 @@ backButton.innerHTML = `
   Zoom Out`;
 document.body.appendChild(backButton);
 
+/* ---- Create the fixed Focus / Unfocus button ---- */
+const fixedFocusBtn = document.createElement('button');
+fixedFocusBtn.className = 'fixed-focus-btn';
+fixedFocusBtn.id = 'fixedFocusBtn';
+fixedFocusBtn.textContent = 'Focus';
+fixedFocusBtn.addEventListener('click', () => {
+  if (state.isZoneExpanded) {
+    zoomBackOut();
+  } else if (state.activeZoneSlug) {
+    expandZone(state.activeZoneSlug);
+  }
+});
+document.body.appendChild(fixedFocusBtn);
+
 /* ---- Build world ---- */
 function buildWorld() {
   worldCanvas.innerHTML = '';
@@ -203,20 +217,7 @@ function buildZone(slug, ind, idx) {
   iconEl.innerHTML = ind.icon;
   clip.appendChild(iconEl);
 
-  /* Focus / Unfocus toggle button (top-right) */
-  const focusBtn = document.createElement('button');
-  focusBtn.className = 'zone-focus-btn';
-  focusBtn.setAttribute('aria-label', `Focus on ${ind.name}`);
-  focusBtn.textContent = 'Focus';
-  focusBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (state.isZoneExpanded && state.activeZoneSlug === slug) {
-      zoomBackOut();
-    } else {
-      expandZone(slug);
-    }
-  });
-  clip.appendChild(focusBtn);
+  /* Focus button removed from zones — now a fixed viewport button (fixedFocusBtn) */
 
   /* Hotspots */
   const positions = HOTSPOT_POSITIONS[Math.min(ind.insights.length - 1, 4)];
@@ -329,6 +330,8 @@ function buildIndustryDrawer() {
         state.openInsightId = null;
         state.openInsightZoneSlug = null;
         state.savedTransform = null;
+        fixedFocusBtn.textContent = 'Focus';
+        fixedFocusBtn.classList.remove('active');
       }
       panToZone(slug, true);
       /* Close drawer after selection on mobile */
@@ -505,11 +508,9 @@ function expandZone(slug) {
     worldViewport.style.cursor = 'default';
   });
 
-  /* Toggle button text to Unfocus */
-  if (activeZoneEl) {
-    const btn = activeZoneEl.querySelector('.zone-focus-btn');
-    if (btn) { btn.textContent = 'Unfocus'; }
-  }
+  /* Toggle fixed button text to Unfocus */
+  fixedFocusBtn.textContent = 'Unfocus';
+  fixedFocusBtn.classList.add('active');
 
   updateBreadcrumb(slug, null);
 }
@@ -637,10 +638,9 @@ function zoomBackOut() {
   state.isZoneExpanded = false;
   state.openInsightId = null;
 
-  /* Reset all focus buttons back to "Focus" */
-  document.querySelectorAll('.zone-focus-btn').forEach(btn => {
-    btn.textContent = 'Focus';
-  });
+  /* Reset fixed focus button back to "Focus" */
+  fixedFocusBtn.textContent = 'Focus';
+  fixedFocusBtn.classList.remove('active');
 
   if (state.activeZoneSlug) {
     updateBreadcrumb(state.activeZoneSlug, null);
@@ -757,6 +757,8 @@ function navigateToZone(slug) {
       z.classList.remove('zone-expanded-active');
     });
     state.isZoneExpanded = false;
+    fixedFocusBtn.textContent = 'Focus';
+    fixedFocusBtn.classList.remove('active');
   }
 
   backButton.classList.remove('visible');
@@ -872,7 +874,7 @@ function closeSearch() {
 /* ---- Pointer events (drag) ---- */
 function onPointerDown(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
-  if (e.target.closest('.nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-drawer, .breadcrumb, .back-button, .detail-fixed')) { return; }
+  if (e.target.closest('.nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-drawer, .breadcrumb, .back-button, .detail-fixed, .fixed-focus-btn')) { return; }
   if (e.touches) { return; }
   state.isDragging   = true;
   state.wasDragged   = false;
@@ -964,7 +966,7 @@ function getTouchDist(touches) {
 function onTouchStart(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
   /* Only skip for UI chrome — NOT for hotspots or zones (those should be draggable) */
-  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-drawer, .back-button, .search-wrapper, .detail-fixed, .zone-focus-btn')) { return; }
+  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-drawer, .back-button, .search-wrapper, .detail-fixed, .fixed-focus-btn')) { return; }
   if (e.touches.length === 1) {
     state.touchState = {
       mode: 'pan',
@@ -1064,7 +1066,7 @@ function onTouchEnd(e) {
       if (hotspot && isZoomLegible()) {
         const insightId = hotspot.dataset.insightId;
         if (insightId) { openInsight(insightId); }
-      } else if (zone && !el.closest('.zone-focus-btn')) {
+      } else if (zone) {
         const slug = zone.dataset.slug;
         if (slug) { panToZone(slug, true); }
       }
