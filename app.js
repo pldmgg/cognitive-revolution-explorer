@@ -203,22 +203,20 @@ function buildZone(slug, ind, idx) {
   iconEl.innerHTML = ind.icon;
   clip.appendChild(iconEl);
 
-  /* Expand button (top-left) — zooms zone to fill viewport */
-  const expandBtn = document.createElement('button');
-  expandBtn.className = 'zone-expand-btn';
-  expandBtn.setAttribute('aria-label', `Expand ${ind.name} to full view`);
-  expandBtn.innerHTML = `
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="4 8 4 4 8 4"/>
-      <polyline points="16 12 16 16 12 16"/>
-      <line x1="4" y1="4" x2="9" y2="9"/>
-      <line x1="16" y1="16" x2="11" y2="11"/>
-    </svg>`;
-  expandBtn.addEventListener('click', (e) => {
+  /* Focus / Unfocus toggle button (top-right) */
+  const focusBtn = document.createElement('button');
+  focusBtn.className = 'zone-focus-btn';
+  focusBtn.setAttribute('aria-label', `Focus on ${ind.name}`);
+  focusBtn.textContent = 'Focus';
+  focusBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    expandZone(slug);
+    if (state.isZoneExpanded && state.activeZoneSlug === slug) {
+      zoomBackOut();
+    } else {
+      expandZone(slug);
+    }
   });
-  clip.appendChild(expandBtn);
+  clip.appendChild(focusBtn);
 
   /* Hotspots */
   const positions = HOTSPOT_POSITIONS[Math.min(ind.insights.length - 1, 4)];
@@ -507,6 +505,12 @@ function expandZone(slug) {
     worldViewport.style.cursor = 'default';
   });
 
+  /* Toggle button text to Unfocus */
+  if (activeZoneEl) {
+    const btn = activeZoneEl.querySelector('.zone-focus-btn');
+    if (btn) { btn.textContent = 'Unfocus'; }
+  }
+
   updateBreadcrumb(slug, null);
 }
 
@@ -632,6 +636,11 @@ function zoomBackOut() {
   state.isDetailActive = false;
   state.isZoneExpanded = false;
   state.openInsightId = null;
+
+  /* Reset all focus buttons back to "Focus" */
+  document.querySelectorAll('.zone-focus-btn').forEach(btn => {
+    btn.textContent = 'Focus';
+  });
 
   if (state.activeZoneSlug) {
     updateBreadcrumb(state.activeZoneSlug, null);
@@ -955,7 +964,7 @@ function getTouchDist(touches) {
 function onTouchStart(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
   /* Only skip for UI chrome — NOT for hotspots or zones (those should be draggable) */
-  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-drawer, .back-button, .search-wrapper, .detail-fixed, .zone-expand-btn')) { return; }
+  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-drawer, .back-button, .search-wrapper, .detail-fixed, .zone-focus-btn')) { return; }
   if (e.touches.length === 1) {
     state.touchState = {
       mode: 'pan',
@@ -1055,7 +1064,7 @@ function onTouchEnd(e) {
       if (hotspot && isZoomLegible()) {
         const insightId = hotspot.dataset.insightId;
         if (insightId) { openInsight(insightId); }
-      } else if (zone && !el.closest('.zone-expand-btn')) {
+      } else if (zone && !el.closest('.zone-focus-btn')) {
         const slug = zone.dataset.slug;
         if (slug) { panToZone(slug, true); }
       }
