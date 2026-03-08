@@ -102,6 +102,8 @@ const onboardingBtn = document.getElementById('onboardingDismiss');
 const detailFixed   = document.getElementById('detailFixed');
 const detailFixedImage = document.getElementById('detailFixedImage');
 const detailFixedText  = document.getElementById('detailFixedText');
+const industryGrid     = document.getElementById('industryGrid');
+const industryGridItems = document.getElementById('industryGridItems');
 
 /* ---- Create the Back Button dynamically ---- */
 const backButton = document.createElement('button');
@@ -283,22 +285,22 @@ function hideFixedDetail() {
   detailFixed.classList.remove('active');
 }
 
-/* ---- Nav pills ---- */
-function buildNavPills() {
-  navPills.innerHTML = '';
+/* ---- Industry Grid (replaces nav pills in header) ---- */
+function buildIndustryGrid() {
+  industryGridItems.innerHTML = '';
   industryKeys.forEach(slug => {
     const ind = INDUSTRIES[slug];
-    const pill = document.createElement('button');
-    pill.className = 'nav-pill';
-    pill.dataset.slug = slug;
-    pill.setAttribute('style', `--pill-color:${ind.color}`);
-    pill.setAttribute('role', 'tab');
-    pill.innerHTML = `<span class="nav-pill-dot"></span>${ind.name}`;
-    pill.addEventListener('click', () => {
+    const item = document.createElement('button');
+    item.className = 'ig-item';
+    item.dataset.slug = slug;
+    item.style.setProperty('--ig-color', ind.color);
+    item.setAttribute('aria-label', ind.name);
+    item.innerHTML = `<span class="ig-dot"></span><span class="ig-tooltip">${ind.name}</span>`;
+    item.addEventListener('click', () => {
       if (state.isDetailActive) { zoomBackOut(); }
       panToZone(slug, true);
     });
-    navPills.appendChild(pill);
+    industryGridItems.appendChild(item);
   });
 }
 
@@ -422,11 +424,8 @@ function expandZone(slug) {
   if (idx < 0) { return; }
   const { x, y } = zoneGridPos(idx);
 
-  /* Hide nav so viewport expands to full screen */
-  setNavHidden(true);
-  /* Use full window dimensions since nav is now hidden */
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
+  const vw = worldViewport.clientWidth;
+  const vh = worldViewport.clientHeight;
 
   /* Scale so zone fits entirely within the viewport (contain, not crop) */
   const scaleX = vw / ZONE_W;
@@ -500,9 +499,6 @@ function clampOffsets() {
 /* ---- Open insight (smooth zoom-reveal) ---- */
 function openInsight(insightId) {
   if (state.isDetailActive) { return; }
-
-  /* Hide nav for immersive detail view */
-  setNavHidden(true);
 
   let foundSlug = null;
   let foundInsight = null;
@@ -667,8 +663,8 @@ function updateActivePill() {
     }
   });
 
-  navPills.querySelectorAll('.nav-pill').forEach((pill, i) => {
-    pill.classList.toggle('active', i === closestIdx);
+  industryGridItems.querySelectorAll('.ig-item').forEach((item, i) => {
+    item.classList.toggle('active', i === closestIdx);
   });
 
   const newSlug = industryKeys[closestIdx];
@@ -826,7 +822,7 @@ function closeSearch() {
 /* ---- Pointer events (drag) ---- */
 function onPointerDown(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
-  if (e.target.closest('.hotspot, .nav-pill, .nav-brand, .search-wrapper, .zoom-controls, .minimap, .breadcrumb, .back-button, .detail-fixed')) { return; }
+  if (e.target.closest('.hotspot, .nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-grid, .breadcrumb, .back-button, .detail-fixed')) { return; }
   if (e.touches) { return; }
   state.isDragging   = true;
   state.wasDragged   = false;
@@ -918,7 +914,7 @@ function getTouchDist(touches) {
 function onTouchStart(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
   /* Only skip for UI chrome — NOT for hotspots or zones (those should be draggable) */
-  if (e.target.closest('.nav-pill, .nav-brand, .zoom-controls, .minimap, .back-button, .search-wrapper, .detail-fixed, .zone-expand-btn')) { return; }
+  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-grid, .back-button, .search-wrapper, .detail-fixed, .zone-expand-btn')) { return; }
   if (e.touches.length === 1) {
     state.touchState = {
       mode: 'pan',
@@ -1101,76 +1097,6 @@ function initOnboarding() {
   });
 }
 
-/* ---- Auto-hide header ---- */
-let _navHidden = false;
-const NAV_REVEAL_ZONE = 60;   /* px from top edge to reveal on desktop */
-let _lastTouchY = 0;
-let _touchDirSamples = [];
-
-function setNavHidden(hidden) {
-  if (hidden === _navHidden) { return; }
-  _navHidden = hidden;
-  topNav.classList.toggle('nav-hidden', hidden);
-  breadcrumb.classList.toggle('nav-hidden', hidden);
-  worldViewport.classList.toggle('nav-hidden', hidden);
-  detailFixed.classList.toggle('nav-hidden', hidden);
-  backButton.classList.toggle('nav-hidden', hidden);
-}
-
-function onMouseMoveNav(e) {
-  /* On desktop, reveal when mouse is near the top */
-  if (window.innerWidth <= MOBILE_BREAKPOINT) { return; }
-  const navBottom = _navHidden ? 0 : (topNav.offsetHeight + breadcrumb.offsetHeight);
-  const revealZone = Math.max(NAV_REVEAL_ZONE, navBottom);
-  if (e.clientY <= revealZone) {
-    setNavHidden(false);
-  } else if (!_navHidden) {
-    /* Hide when mouse moves below the nav + breadcrumb area */
-    if (!searchWrapper.classList.contains('open')) {
-      setNavHidden(true);
-    }
-  }
-}
-
-/* Mobile: reveal on scroll-up gesture, hide on scroll-down.
-   We track touchmove direction on the world viewport. */
-function onTouchMoveNav(e) {
-  if (window.innerWidth > MOBILE_BREAKPOINT) { return; }
-  if (e.touches.length !== 1) { return; }
-  const curY = e.touches[0].clientY;
-  const dy = curY - _lastTouchY;
-  _lastTouchY = curY;
-  _touchDirSamples.push(dy);
-  if (_touchDirSamples.length > 5) { _touchDirSamples.shift(); }
-  const avgDY = _touchDirSamples.reduce((a, b) => a + b, 0) / _touchDirSamples.length;
-  if (avgDY > 2) {
-    /* finger moving down → scrolling up → reveal */
-    setNavHidden(false);
-  } else if (avgDY < -2) {
-    /* finger moving up → scrolling down → hide */
-    setNavHidden(true);
-  }
-}
-
-function onTouchStartNav(e) {
-  if (e.touches.length === 1) {
-    _lastTouchY = e.touches[0].clientY;
-    _touchDirSamples = [];
-  }
-}
-
-/* Auto-hide after a short delay on init */
-let _navAutoHideTimer = null;
-function scheduleNavAutoHide() {
-  clearTimeout(_navAutoHideTimer);
-  _navAutoHideTimer = setTimeout(() => {
-    /* Don't hide if mouse is over the nav or search is open */
-    if (!searchWrapper.classList.contains('open')) {
-      setNavHidden(true);
-    }
-  }, 2500);
-}
-
 /* ---- Wire up all events ---- */
 function wireEvents() {
   worldViewport.addEventListener('mousedown', onPointerDown);
@@ -1184,15 +1110,6 @@ function wireEvents() {
   worldViewport.addEventListener('touchend',   onTouchEnd);
 
   window.addEventListener('keydown', onKeyDown);
-
-  /* Auto-hide header */
-  window.addEventListener('mousemove', onMouseMoveNav);
-  window.addEventListener('touchstart', onTouchStartNav, { passive: true });
-  window.addEventListener('touchmove', onTouchMoveNav, { passive: true });
-
-  /* Keep nav visible when hovering over it */
-  topNav.addEventListener('mouseenter', () => setNavHidden(false));
-  breadcrumb.addEventListener('mouseenter', () => setNavHidden(false));
 
   zoomIn.addEventListener('click',  onZoomIn);
   zoomOut.addEventListener('click', onZoomOut);
@@ -1266,13 +1183,12 @@ function syncNavHeight() {
 /* ---- Init ---- */
 function init() {
   buildWorld();
-  buildNavPills();
+  buildIndustryGrid();
   syncNavHeight();
   buildMinimap();
   wireEvents();
   initOnboarding();
   fitWorld(false);
-  scheduleNavAutoHide();
 }
 
 document.addEventListener('DOMContentLoaded', init);
