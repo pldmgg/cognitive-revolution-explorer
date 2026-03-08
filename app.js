@@ -501,7 +501,7 @@ function expandZone(slug) {
 
   lerpTo(offX, offY, targetScale, ANIM_DURATION, () => {
     state.isZoneExpanded = true;
-    backButton.classList.add('visible');
+    /* No back button in focus mode — user uses Unfocus button instead */
     worldViewport.style.cursor = 'default';
   });
 
