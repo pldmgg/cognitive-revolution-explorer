@@ -19,6 +19,14 @@ const PAN_KEY_STEP = 80;
 const ANIM_DURATION = 700;
 const DRAG_THRESHOLD = 6;   /* px moved before a mousedown counts as drag */
 
+/* When zoomed out past this threshold the hotspot text is illegible,
+   so clicks on zones/hotspots should pan-to-zoom instead of opening detail.
+   Threshold: zone must occupy at least 40% of viewport width. */
+function isZoomLegible() {
+  const vw = window.innerWidth;
+  return (state.scale * ZONE_W) >= (vw * 0.4);
+}
+
 /* ---- Type meta ---- */
 const TYPE_META = {
   trend:   { icon: '\u2191', label: 'Trend' },
@@ -258,6 +266,12 @@ function buildHotspot(insight, ind, xPct, yPct) {
   hs.addEventListener('click', (e) => {
     e.stopPropagation();
     if (_suppressNextClick) { return; }
+    /* If zoomed out too far, pan to the parent zone instead */
+    if (!isZoomLegible()) {
+      const zone = e.target.closest('.zone');
+      if (zone && zone.dataset.slug) { panToZone(zone.dataset.slug, true); }
+      return;
+    }
     openInsight(insight.id);
   });
   hs.addEventListener('keydown', (e) => {
@@ -1047,7 +1061,7 @@ function onTouchEnd(e) {
     if (el) {
       const hotspot = el.closest('.hotspot');
       const zone = el.closest('.zone');
-      if (hotspot) {
+      if (hotspot && isZoomLegible()) {
         const insightId = hotspot.dataset.insightId;
         if (insightId) { openInsight(insightId); }
       } else if (zone && !el.closest('.zone-expand-btn')) {
