@@ -253,6 +253,7 @@ function buildHotspot(insight, ind, xPct, yPct) {
 
   hs.addEventListener('click', (e) => {
     e.stopPropagation();
+    if (_suppressNextClick) { return; }
     openInsight(insight.id);
   });
   hs.addEventListener('keydown', (e) => {
@@ -837,6 +838,15 @@ function onWheel(e) {
   }
 }
 
+/* ---- Touch-to-click suppression ---- */
+/* When we handle a touch interaction ourselves, suppress the browser's
+   synthesized click event that follows touchend. */
+let _suppressNextClick = false;
+function suppressClick() {
+  _suppressNextClick = true;
+  setTimeout(() => { _suppressNextClick = false; }, 400);
+}
+
 /* ---- Touch events ---- */
 function getTouchMidpoint(touches) {
   return {
@@ -852,12 +862,16 @@ function getTouchDist(touches) {
 
 function onTouchStart(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
-  if (e.target.closest('.hotspot, .nav-pill, .nav-brand, .zoom-controls, .minimap, .back-button, .search-wrapper, .detail-fixed')) { return; }
+  /* Only skip for UI chrome — NOT for hotspots or zones (those should be draggable) */
+  if (e.target.closest('.nav-pill, .nav-brand, .zoom-controls, .minimap, .back-button, .search-wrapper, .detail-fixed, .zone-expand-btn')) { return; }
   if (e.touches.length === 1) {
     state.touchState = {
       mode: 'pan',
+      startX: e.touches[0].clientX,
+      startY: e.touches[0].clientY,
       lastX: e.touches[0].clientX,
-      lastY: e.touches[0].clientY
+      lastY: e.touches[0].clientY,
+      wasDragged: false
     };
   } else if (e.touches.length === 2) {
     const mid  = getTouchMidpoint(e.touches);
@@ -866,7 +880,8 @@ function onTouchStart(e) {
       mode: 'pinch',
       lastDist: dist,
       lastMidX: mid.x,
-      lastMidY: mid.y
+      lastMidY: mid.y,
+      wasDragged: true  /* pinch always counts as a drag */
     };
     e.preventDefault();
   }
@@ -879,6 +894,16 @@ function onTouchMove(e) {
     const curY = e.touches[0].clientY;
     const dx = curX - state.touchState.lastX;
     const dy = curY - state.touchState.lastY;
+    /* Check if we've exceeded the drag threshold */
+    if (!state.touchState.wasDragged) {
+      const totalDX = curX - state.touchState.startX;
+      const totalDY = curY - state.touchState.startY;
+      if (Math.hypot(totalDX, totalDY) > DRAG_THRESHOLD) {
+        state.touchState.wasDragged = true;
+      } else {
+        return;  /* don't move canvas until threshold exceeded */
+      }
+    }
     state.offsetX += dx;
     state.offsetY += dy;
     state.touchState.lastX = curX;
@@ -920,11 +945,31 @@ function onTouchEnd(e) {
   if (e.touches.length === 1 && state.touchState.mode === 'pinch') {
     state.touchState = {
       mode: 'pan',
+      startX: e.touches[0].clientX,
+      startY: e.touches[0].clientY,
       lastX: e.touches[0].clientX,
-      lastY: e.touches[0].clientY
+      lastY: e.touches[0].clientY,
+      wasDragged: true  /* came from pinch, suppress tap */
     };
     return;
   }
+  /* If it was a tap (not a drag), fire the tap target */
+  if (!state.touchState.wasDragged && e.changedTouches.length > 0) {
+    const touch = e.changedTouches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (el) {
+      const hotspot = el.closest('.hotspot');
+      const zone = el.closest('.zone');
+      if (hotspot) {
+        const insightId = hotspot.dataset.insightId;
+        if (insightId) { openInsight(insightId); }
+      } else if (zone && !el.closest('.zone-expand-btn')) {
+        const slug = zone.dataset.slug;
+        if (slug) { panToZone(slug, true); }
+      }
+    }
+  }
+  suppressClick();
   state.touchState = null;
 }
 
@@ -1052,8 +1097,9 @@ function wireEvents() {
     }
   });
 
-  /* Zone click-to-navigate — suppressed if the user was dragging */
+  /* Zone click-to-navigate — suppressed if the user was dragging or touch-tapping */
   worldCanvas.addEventListener('click', (e) => {
+    if (_suppressNextClick) { return; }
     if (state.isDetailActive) { return; }
     if (state.wasDragged) { return; }
     const zone = e.target.closest('.zone');
