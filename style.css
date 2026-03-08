@@ -286,22 +286,9 @@ html, body {
 
 /* Zone separator — no longer needed in grid layout */
 
-/* ---------- Zone Floating Title (above zone) ---------- */
+/* ---------- Zone Floating Title (above zone) — hidden ---------- */
 .zone-float-title {
-  position: absolute;
-  left: 0; right: 0;
-  bottom: 100%;
-  z-index: 12;
-  padding: 0 8px 8px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-.zone.zone-active .zone-float-title {
-  opacity: 1;
+  display: none;
 }
 .zone-float-name {
   font-family: var(--font-heading);
@@ -417,13 +404,7 @@ html, body {
 }
 
 .zone-headline-stat {
-  text-align: right;
-  flex-shrink: 0;
-  background: rgba(10, 14, 26, 0.75);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  padding: 8px 14px;
-  border-radius: 10px;
+  display: none;
 }
 .zone-stat-value {
   font-family: var(--font-heading);
