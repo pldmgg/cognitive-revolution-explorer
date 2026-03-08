@@ -79,7 +79,7 @@ html, body {
 /* Nav pills hidden from header — now in industry grid widget */
 .nav-pills { display: none; }
 
-.nav-right { flex-shrink: 0; }
+.nav-right { flex-shrink: 0; display: flex; align-items: center; gap: 10px; }
 
 /* ---------- Search ---------- */
 .search-wrapper { position: relative; }
@@ -343,49 +343,31 @@ html, body {
   line-height: 1.3;
 }
 
-/* ---------- Fixed Focus / Unfocus Button (viewport top-right) ---------- */
-.fixed-focus-btn {
-  position: fixed;
-  top: calc(var(--nav-h) + 14px);
-  right: 18px;
-  z-index: 120;
-  padding: 20px 52px;
-  border-radius: 14px;
-  border: 3px solid #6ee7f7;
-  background: rgba(10, 20, 40, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+/* ---------- Focus / Unfocus Button (in header nav-right) ---------- */
+.nav-focus-btn {
+  padding: 6px 18px;
+  border-radius: 6px;
+  border: 1.5px solid #6ee7f7;
+  background: rgba(110, 231, 247, 0.1);
   color: #6ee7f7;
   font-family: var(--font-heading);
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: 0.07em;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow:
-    0 0 24px rgba(110, 231, 247, 0.5),
-    0 0 60px rgba(110, 231, 247, 0.2),
-    inset 0 0 14px rgba(110, 231, 247, 0.15);
-  animation: focus-btn-glow 2s ease-in-out infinite;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
-@keyframes focus-btn-glow {
-  0%, 100% { box-shadow: 0 0 24px rgba(110, 231, 247, 0.5), 0 0 60px rgba(110, 231, 247, 0.2), inset 0 0 14px rgba(110, 231, 247, 0.15); }
-  50% { box-shadow: 0 0 32px rgba(110, 231, 247, 0.7), 0 0 80px rgba(110, 231, 247, 0.3), inset 0 0 18px rgba(110, 231, 247, 0.25); }
-}
-.fixed-focus-btn:hover {
-  background: rgba(110, 231, 247, 0.2);
+.nav-focus-btn:hover {
+  background: rgba(110, 231, 247, 0.22);
   border-color: #fff;
   color: #fff;
-  box-shadow:
-    0 0 36px rgba(110, 231, 247, 0.7),
-    0 0 90px rgba(110, 231, 247, 0.35),
-    inset 0 0 16px rgba(110, 231, 247, 0.2);
 }
-.fixed-focus-btn:active {
+.nav-focus-btn:active {
   transform: scale(0.95);
 }
-.fixed-focus-btn.active {
+.nav-focus-btn.active {
   background: rgba(110, 231, 247, 0.18);
   border-color: #6ee7f7;
   color: #6ee7f7;
@@ -1132,13 +1114,10 @@ html, body {
   .zone-stat-label { font-size: 8px; max-width: 70px; }
   .zone-headline-stat { padding: 6px 10px; }
 
-  /* Fixed focus button on mobile */
-  .fixed-focus-btn {
-    top: calc(var(--nav-h) + 10px);
-    right: 10px;
-    padding: 14px 28px;
-    font-size: 18px;
-    border-width: 2px;
+  /* Focus button in header on mobile */
+  .nav-focus-btn {
+    padding: 5px 12px;
+    font-size: 11px;
   }
 
   /* Floating title above zone */

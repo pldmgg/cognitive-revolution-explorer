@@ -127,11 +127,8 @@ backButton.innerHTML = `
   Zoom Out`;
 document.body.appendChild(backButton);
 
-/* ---- Create the fixed Focus / Unfocus button ---- */
-const fixedFocusBtn = document.createElement('button');
-fixedFocusBtn.className = 'fixed-focus-btn';
-fixedFocusBtn.id = 'fixedFocusBtn';
-fixedFocusBtn.textContent = 'Focus';
+/* ---- Reference the header Focus / Unfocus button ---- */
+const fixedFocusBtn = document.getElementById('navFocusBtn');
 fixedFocusBtn.addEventListener('click', () => {
   if (state.isZoneExpanded) {
     zoomBackOut();
@@ -139,7 +136,6 @@ fixedFocusBtn.addEventListener('click', () => {
     expandZone(state.activeZoneSlug);
   }
 });
-document.body.appendChild(fixedFocusBtn);
 
 /* ---- Build world ---- */
 function buildWorld() {
@@ -874,7 +870,7 @@ function closeSearch() {
 /* ---- Pointer events (drag) ---- */
 function onPointerDown(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
-  if (e.target.closest('.nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-drawer, .breadcrumb, .back-button, .detail-fixed, .fixed-focus-btn')) { return; }
+  if (e.target.closest('.nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-drawer, .breadcrumb, .back-button, .detail-fixed, .nav-focus-btn')) { return; }
   if (e.touches) { return; }
   state.isDragging   = true;
   state.wasDragged   = false;
@@ -966,7 +962,7 @@ function getTouchDist(touches) {
 function onTouchStart(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
   /* Only skip for UI chrome — NOT for hotspots or zones (those should be draggable) */
-  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-drawer, .back-button, .search-wrapper, .detail-fixed, .fixed-focus-btn')) { return; }
+  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-drawer, .back-button, .search-wrapper, .detail-fixed, .nav-focus-btn')) { return; }
   if (e.touches.length === 1) {
     state.touchState = {
       mode: 'pan',
