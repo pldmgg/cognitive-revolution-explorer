@@ -468,31 +468,25 @@ function zoomAroundPoint(newScale, cx, cy) {
 }
 
 /* ---- Clamp offset ---- */
-/* Dragging right stops when the left edge of the first column is
-   visible (with a small margin).  Dragging left stops when the
-   right edge of the last column is visible.  Same vertically. */
+/* The user can pan until the first column's left edge reaches
+   the viewport center, and until the last column's right edge
+   reaches the viewport center.  This guarantees every edge of
+   every image is comfortably reachable.  Same logic vertically. */
 function clampOffsets() {
   const vw = worldViewport.clientWidth;
   const vh = worldViewport.clientHeight;
   const s  = state.scale;
-  const PAD = 8;  /* small pixel margin so content doesn't touch the edge */
 
-  /* World-space edges */
-  const worldLeft   = 0;
-  const worldRight  = totalWorldW;
-  const worldTop    = 0;
-  const worldBottom = totalWorldH;
-
-  /* maxOffX = dragged fully right → left edge of world sits at left of viewport + pad */
-  const maxOffX = PAD - worldLeft * s;
-  /* minOffX = dragged fully left → right edge of world sits at right of viewport - pad */
-  const minOffX = (vw - PAD) - worldRight * s;
+  /* maxOffX: dragged fully RIGHT → left edge of world (x=0) reaches viewport center */
+  const maxOffX = vw / 2;
+  /* minOffX: dragged fully LEFT → right edge of world reaches viewport center */
+  const minOffX = vw / 2 - totalWorldW * s;
 
   state.offsetX = clamp(state.offsetX, Math.min(minOffX, maxOffX), Math.max(minOffX, maxOffX));
 
   /* Same for rows */
-  const maxOffY = PAD - worldTop * s;
-  const minOffY = (vh - PAD) - worldBottom * s;
+  const maxOffY = vh / 2;
+  const minOffY = vh / 2 - totalWorldH * s;
 
   state.offsetY = clamp(state.offsetY, Math.min(minOffY, maxOffY), Math.max(minOffY, maxOffY));
 }
