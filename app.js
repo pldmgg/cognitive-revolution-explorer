@@ -265,7 +265,7 @@ function buildHotspot(insight, ind, xPct, yPct) {
 
   hs.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (_suppressNextClick) { return; }
+    if (_suppressNextClick || state.wasDragged) { return; }
     /* If zoomed out too far, pan to the parent zone instead */
     if (!isZoomLegible()) {
       const zone = e.target.closest('.zone');
@@ -718,20 +718,11 @@ function updateActivePill() {
   });
 
   const newSlug = industryKeys[closestIdx];
-  if (newSlug !== state.activeZoneSlug) {
-    if (state.activeZoneSlug) {
-      const oldZone = document.getElementById(`zone-${state.activeZoneSlug}`);
-      if (oldZone) { oldZone.classList.remove('zone-active'); }
-    }
-    if (!state.isDetailActive) {
-      const newZone = document.getElementById(`zone-${newSlug}`);
-      if (newZone) { newZone.classList.add('zone-active'); }
-    }
-  } else if (!state.isDetailActive) {
-    const curZone = document.getElementById(`zone-${newSlug}`);
-    if (curZone && !curZone.classList.contains('zone-active')) {
-      curZone.classList.add('zone-active');
-    }
+  /* Always clear ALL halos first, then apply to the single active zone */
+  document.querySelectorAll('.zone.zone-active').forEach(z => z.classList.remove('zone-active'));
+  if (!state.isDetailActive) {
+    const newZone = document.getElementById(`zone-${newSlug}`);
+    if (newZone) { newZone.classList.add('zone-active'); }
   }
   state.activeZoneSlug = newSlug;
 }
@@ -872,7 +863,7 @@ function closeSearch() {
 /* ---- Pointer events (drag) ---- */
 function onPointerDown(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
-  if (e.target.closest('.hotspot, .nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-drawer, .breadcrumb, .back-button, .detail-fixed')) { return; }
+  if (e.target.closest('.nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-drawer, .breadcrumb, .back-button, .detail-fixed')) { return; }
   if (e.touches) { return; }
   state.isDragging   = true;
   state.wasDragged   = false;
