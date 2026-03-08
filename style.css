@@ -255,23 +255,25 @@ html, body {
 @keyframes halo-pulse {
   0%, 100% {
     box-shadow:
-      0 0 0 3px var(--zone-glow-color, #6ee7f7),
-      0 0 24px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 80%, transparent),
-      0 0 60px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 55%, transparent),
-      0 0 110px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 35%, transparent),
-      0 0 160px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 15%, transparent);
+      0 0 0 4px var(--zone-glow-color, #6ee7f7),
+      0 0 20px var(--zone-glow-color, #6ee7f7),
+      0 0 60px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 90%, transparent),
+      0 0 120px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 65%, transparent),
+      0 0 200px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 40%, transparent),
+      0 0 300px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 20%, transparent);
   }
   50% {
     box-shadow:
-      0 0 0 4px var(--zone-glow-color, #6ee7f7),
-      0 0 32px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 90%, transparent),
-      0 0 80px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 65%, transparent),
-      0 0 140px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 45%, transparent),
-      0 0 200px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 20%, transparent);
+      0 0 0 6px #fff,
+      0 0 30px var(--zone-glow-color, #6ee7f7),
+      0 0 80px var(--zone-glow-color, #6ee7f7),
+      0 0 160px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 85%, transparent),
+      0 0 260px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 55%, transparent),
+      0 0 380px color-mix(in srgb, var(--zone-glow-color, #6ee7f7) 25%, transparent);
   }
 }
 .zone.zone-active {
-  animation: halo-pulse 2.5s ease-in-out infinite;
+  animation: halo-pulse 2s ease-in-out infinite;
 }
 
 .zone-bg {
