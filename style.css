@@ -349,31 +349,27 @@ html, body {
   top: 12px;
   right: 12px;
   z-index: 15;
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: 1px solid rgba(110, 231, 247, 0.4);
-  background: rgba(10, 14, 26, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: 2px solid #6ee7f7;
+  background: rgba(10, 20, 40, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #6ee7f7;
   font-family: var(--font-heading);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.25s ease;
-  opacity: 0;
-  pointer-events: none;
-}
-.zone:hover .zone-focus-btn,
-.zone.zone-expanded-active .zone-focus-btn {
-  opacity: 1;
-  pointer-events: auto;
+  box-shadow: 0 0 12px rgba(110, 231, 247, 0.3), inset 0 0 8px rgba(110, 231, 247, 0.1);
 }
 .zone-focus-btn:hover {
-  background: rgba(110, 231, 247, 0.2);
-  border-color: #6ee7f7;
+  background: rgba(110, 231, 247, 0.25);
+  border-color: #fff;
   color: #fff;
+  box-shadow: 0 0 20px rgba(110, 231, 247, 0.5), inset 0 0 12px rgba(110, 231, 247, 0.15);
 }
 .zone-focus-btn:active {
   transform: scale(0.95);
@@ -1120,14 +1116,12 @@ html, body {
   .zone-stat-label { font-size: 8px; max-width: 70px; }
   .zone-headline-stat { padding: 6px 10px; }
 
-  /* Focus button — always visible on mobile (no hover) */
+  /* Focus button on mobile */
   .zone-focus-btn {
     top: 8px;
     right: 8px;
-    padding: 5px 10px;
-    font-size: 11px;
-    opacity: 0.9;
-    pointer-events: auto;
+    padding: 8px 16px;
+    font-size: 13px;
   }
 
   /* Floating title above zone */
