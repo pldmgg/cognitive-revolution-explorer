@@ -298,7 +298,26 @@ function buildIndustryDrawer() {
     item.setAttribute('aria-label', ind.name);
     item.innerHTML = `<span class="id-dot"></span>${ind.name}`;
     item.addEventListener('click', () => {
-      if (state.isDetailActive) { zoomBackOut(); }
+      /* Exit any expanded/detail state without animation before navigating */
+      if (state.isDetailActive || state.isZoneExpanded) {
+        if (state.isDetailActive) {
+          hideFixedDetail();
+          if (state.openInsightZoneSlug) {
+            const zone = document.getElementById(`zone-${state.openInsightZoneSlug}`);
+            if (zone) { zone.classList.remove('detail-active'); }
+          }
+        }
+        backButton.classList.remove('visible');
+        worldCanvas.classList.remove('zone-expanded');
+        document.querySelectorAll('.zone.zone-expanded-active').forEach(z => {
+          z.classList.remove('zone-expanded-active');
+        });
+        state.isDetailActive = false;
+        state.isZoneExpanded = false;
+        state.openInsightId = null;
+        state.openInsightZoneSlug = null;
+        state.savedTransform = null;
+      }
       panToZone(slug, true);
       /* Close drawer after selection on mobile */
       if (window.innerWidth <= MOBILE_BREAKPOINT) {
