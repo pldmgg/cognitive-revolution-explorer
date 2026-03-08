@@ -102,8 +102,9 @@ const onboardingBtn = document.getElementById('onboardingDismiss');
 const detailFixed   = document.getElementById('detailFixed');
 const detailFixedImage = document.getElementById('detailFixedImage');
 const detailFixedText  = document.getElementById('detailFixedText');
-const industryGrid     = document.getElementById('industryGrid');
-const industryGridItems = document.getElementById('industryGridItems');
+const industryDrawer   = document.getElementById('industryDrawer');
+const idPanel          = document.getElementById('idPanel');
+const idTab            = document.getElementById('idTab');
 
 /* ---- Create the Back Button dynamically ---- */
 const backButton = document.createElement('button');
@@ -285,22 +286,38 @@ function hideFixedDetail() {
   detailFixed.classList.remove('active');
 }
 
-/* ---- Industry Grid (replaces nav pills in header) ---- */
-function buildIndustryGrid() {
-  industryGridItems.innerHTML = '';
+/* ---- Industry Drawer (left-edge slide-out list) ---- */
+function buildIndustryDrawer() {
+  idPanel.innerHTML = '';
   industryKeys.forEach(slug => {
     const ind = INDUSTRIES[slug];
     const item = document.createElement('button');
-    item.className = 'ig-item';
+    item.className = 'id-item';
     item.dataset.slug = slug;
-    item.style.setProperty('--ig-color', ind.color);
+    item.style.setProperty('--id-color', ind.color);
     item.setAttribute('aria-label', ind.name);
-    item.innerHTML = `<span class="ig-dot"></span><span class="ig-tooltip">${ind.name}</span>`;
+    item.innerHTML = `<span class="id-dot"></span>${ind.name}`;
     item.addEventListener('click', () => {
       if (state.isDetailActive) { zoomBackOut(); }
       panToZone(slug, true);
+      /* Close drawer after selection on mobile */
+      if (window.innerWidth <= MOBILE_BREAKPOINT) {
+        industryDrawer.classList.remove('open');
+      }
     });
-    industryGridItems.appendChild(item);
+    idPanel.appendChild(item);
+  });
+
+  /* Tab toggle */
+  idTab.addEventListener('click', () => {
+    industryDrawer.classList.toggle('open');
+  });
+
+  /* Close drawer when clicking outside */
+  document.addEventListener('click', (e) => {
+    if (industryDrawer.classList.contains('open') && !industryDrawer.contains(e.target)) {
+      industryDrawer.classList.remove('open');
+    }
   });
 }
 
@@ -663,7 +680,7 @@ function updateActivePill() {
     }
   });
 
-  industryGridItems.querySelectorAll('.ig-item').forEach((item, i) => {
+  idPanel.querySelectorAll('.id-item').forEach((item, i) => {
     item.classList.toggle('active', i === closestIdx);
   });
 
@@ -822,7 +839,7 @@ function closeSearch() {
 /* ---- Pointer events (drag) ---- */
 function onPointerDown(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
-  if (e.target.closest('.hotspot, .nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-grid, .breadcrumb, .back-button, .detail-fixed')) { return; }
+  if (e.target.closest('.hotspot, .nav-brand, .search-wrapper, .zoom-controls, .minimap, .industry-drawer, .breadcrumb, .back-button, .detail-fixed')) { return; }
   if (e.touches) { return; }
   state.isDragging   = true;
   state.wasDragged   = false;
@@ -914,7 +931,7 @@ function getTouchDist(touches) {
 function onTouchStart(e) {
   if (state.isDetailActive || state.isZoneExpanded) { return; }
   /* Only skip for UI chrome — NOT for hotspots or zones (those should be draggable) */
-  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-grid, .back-button, .search-wrapper, .detail-fixed, .zone-expand-btn')) { return; }
+  if (e.target.closest('.nav-brand, .zoom-controls, .minimap, .industry-drawer, .back-button, .search-wrapper, .detail-fixed, .zone-expand-btn')) { return; }
   if (e.touches.length === 1) {
     state.touchState = {
       mode: 'pan',
@@ -1183,7 +1200,7 @@ function syncNavHeight() {
 /* ---- Init ---- */
 function init() {
   buildWorld();
-  buildIndustryGrid();
+  buildIndustryDrawer();
   syncNavHeight();
   buildMinimap();
   wireEvents();

@@ -841,79 +841,107 @@ html, body {
 .info-panel { display: none; }
 .panel-backdrop { display: none; }
 
-/* ---------- Industry Grid Widget (above minimap) ---------- */
-.industry-grid {
+/* ---------- Industry Drawer (left-edge slide-out) ---------- */
+.industry-drawer {
   position: fixed;
-  bottom: 200px;  /* above minimap (72+120+8) */
-  left: 16px;
-  z-index: 90;
-  width: 180px;
-  background: rgba(10, 14, 26, 0.85);
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  z-index: 95;
+  display: flex;
+  align-items: stretch;
+}
+
+/* The panel that slides in/out */
+.id-panel {
+  width: 200px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: rgba(10, 14, 26, 0.92);
   border: 1px solid var(--border-light);
-  border-radius: 8px;
-  padding: 8px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  padding: 8px 0;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.industry-drawer.open .id-panel {
+  transform: translateX(0);
 }
 
-.industry-grid-items {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 3px;
-}
-
-.ig-item {
-  position: relative;
+/* The tab/handle that sticks out */
+.id-tab {
+  align-self: center;
+  width: 28px;
+  min-height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1;
-  border-radius: 5px;
-  border: 1.5px solid var(--border);
-  background: rgba(255,255,255,0.03);
+  background: rgba(10, 14, 26, 0.88);
+  border: 1px solid var(--border-light);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
   cursor: pointer;
-  transition: all 0.2s ease;
+  color: var(--text-muted);
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  flex-shrink: 0;
 }
-.ig-item:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: var(--ig-color, #6ee7f7);
+.id-tab:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  width: 32px;
 }
-.ig-item.active {
-  border-color: var(--ig-color, #6ee7f7);
-  background: color-mix(in srgb, var(--ig-color, #6ee7f7) 18%, transparent);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--ig-color, #6ee7f7) 35%, transparent);
+.id-tab svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+.industry-drawer.open .id-tab svg {
+  transform: rotate(180deg);
 }
 
-.ig-dot {
+/* Each industry row */
+.id-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 14px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: left;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.id-item:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+}
+.id-item.active {
+  color: #fff;
+  background: color-mix(in srgb, var(--id-color, #6ee7f7) 12%, transparent);
+}
+.id-item.active .id-dot {
+  box-shadow: 0 0 6px var(--id-color, #6ee7f7);
+}
+
+.id-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--ig-color, #6ee7f7);
+  background: var(--id-color, #6ee7f7);
   flex-shrink: 0;
-}
-
-/* Tooltip on hover */
-.ig-item .ig-tooltip {
-  position: absolute;
-  left: calc(100% + 8px);
-  top: 50%;
-  transform: translateY(-50%);
-  white-space: nowrap;
-  background: rgba(10, 14, 26, 0.95);
-  border: 1px solid var(--border-light);
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: var(--font-heading);
-  color: var(--text);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 200;
-}
-.ig-item:hover .ig-tooltip {
-  opacity: 1;
 }
 
 /* ---------- Minimap ---------- */
@@ -1066,9 +1094,14 @@ html, body {
   /* Breadcrumb */
   .breadcrumb { padding: 0 12px; font-size: 11px; }
 
-  /* Minimap & industry grid hidden on mobile */
+  /* Minimap hidden on mobile */
   .minimap { display: none; }
-  .industry-grid { display: none; }
+
+  /* Industry drawer: smaller on mobile */
+  .industry-drawer { top: auto; bottom: 60px; transform: translateY(0); }
+  .id-panel { width: 170px; max-height: 60vh; font-size: 11px; }
+  .id-tab { min-height: 60px; width: 24px; }
+  .id-item { padding: 6px 10px; font-size: 11px; }
 
   /* Zoom controls — smaller, nudged into corner */
   .zoom-controls { bottom: 12px; right: 8px; gap: 2px; }
